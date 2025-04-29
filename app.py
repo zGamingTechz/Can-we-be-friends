@@ -67,6 +67,11 @@ def home():
     return render_template("home.html", question_text=questions[qid]["text"], qid = qid)
 
 
+@app.route("/summary")
+def summary():
+    pass
+
+
 @app.route("/clear")
 def clear_session():
     session.pop("email", None)
