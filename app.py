@@ -63,7 +63,7 @@ def home():
         session['qid'] += 1
         if session['qid'] >= len(questions):
             session.pop('qid')
-            return redirect("/loading", source="home")
+            return redirect(url_for("loading", source="home"))
 
         return redirect("/home")
 
@@ -86,7 +86,7 @@ def loading():
         duration = 6
         redirect_url = "/home"
     elif source == "home":
-        messages = [random.choice(text) for i in range(3)]
+        messages = random.sample(text, k=4)
         duration = 12
         redirect_url = "/summary"
 
