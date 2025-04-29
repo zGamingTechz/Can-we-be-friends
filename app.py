@@ -64,7 +64,7 @@ def home():
 
         return redirect("/home")
 
-    return render_template("home.html", question=questions[qid])
+    return render_template("home.html", question_text=questions[qid]["text"], qid = qid)
 
 
 @app.route("/clear")

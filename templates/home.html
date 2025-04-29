@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friendship Journey</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_home.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Friendship Journey</h1>
+                <p class="hero-subtitle">Getting to know each other one question at a time</p>
+                <div class="hero-circles">
+                    <div class="circle circle-1"></div>
+                    <div class="circle circle-2"></div>
+                    <div class="circle circle-3"></div>
+                </div>
+            </div>
+        </div>
+        
+        <main class="main-content">
+            <div class="progress-container">
+                <div class="progress-bar-wrapper">
+                    <div class="progress-text">Question {{ qid + 1 }} of 30</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: {{ (qid / 30) * 100 }}%"></div>
+                    </div>
+                    <div class="progress-percent">{{ ((qid / 30) * 100) | round }}% complete</div>
+                </div>
+            </div>
+            
+            <div class="question-container">
+                <div class="question-number">#{{ qid + 1 }}</div>
+                <div class="question-text">
+                    <h2>{{ question_text }}</h2>
+                </div>
+                
+                <div class="question-actions">
+                    <form method="post">
+                        <input type="hidden" name="qid" value="{{ qid }}">
+                        <div class="buttons">
+                            <button type="submit" name="answer" value="yes" class="btn btn-yes">
+                                <i class="fas fa-check-circle"></i>
+                                <span>Yes</span>
+                            </button>
+                            <button type="submit" name="answer" value="no" class="btn btn-no">
+                                <i class="fas fa-times-circle"></i>
+                                <span>No</span>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>&copy; 2025 Bhavya. All rights reserved.</p>
+        </footer>
+    </div>
+</body>
+</html>
