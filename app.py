@@ -23,7 +23,7 @@ def login():
 
         user = User.query.filter_by(email=email).first()
         if user:
-            return render_template("login.html", message = "You already answered!", status = "error")
+            return redirect("/summary")
 
         new_user = User(
             username=username,
@@ -35,7 +35,7 @@ def login():
 
         return redirect("/home")
 
-    return render_template("login.html", message = "Let's find out!", status = "success")
+    return render_template("login.html")
 
 
 @app.route('/home', methods=["GET", "POST"])
