@@ -91,15 +91,155 @@
                 </div>
                 
                 <div class="action-buttons">
-                    <a href="{{ url_for('social_links') }}" class="btn btn-connect">
-                        <i class="fas fa-user-plus"></i>
-                        <span>Connect with Me</span>
-                    </a>
-                    <a href="{{ url_for('start_over') }}" class="btn btn-restart">
-                        <i class="fas fa-redo"></i>
-                        <span>Start Over</span>
-                    </a>
+                    <button id="shareButton" class="btn btn-share">
+                        <i class="fas fa-share-alt"></i>
+                        <span>Share Results</span>
+                    </button>
                 </div>
+                
+                <!-- Share Modal -->
+                <div id="shareModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-button">&times;</span>
+                        <h3>Share Your Friendship Results</h3>
+                        <div class="share-preview" id="shareCard">
+                            <div class="share-card-header">
+                                <h4>Friendship Score</h4>
+                                <div class="share-score">{{ score }}/65</div>
+                            </div>
+                            <div class="share-message">
+                                {% if score < 10 %}
+                                    <div class="share-emoji">😐</div>
+                                    <div>Meh, I don't know if we can be friends.</div>
+                                {% elif score < 20 %}
+                                    <div class="share-emoji">🤔</div>
+                                    <div>Ehh, I don't know, maybe we can become friends.</div>
+                                {% elif score < 30 %}
+                                    <div class="share-emoji">🙂</div>
+                                    <div>We have a chance of becoming friends!</div>
+                                {% elif score < 45 %}
+                                    <div class="share-emoji">😊</div>
+                                    <div>Yeah, we can definitely be good friends!</div>
+                                {% elif score < 50 %}
+                                    <div class="share-emoji">😄</div>
+                                    <div>We're gonna be close friends for sure!</div>
+                                {% elif score < 55 %}
+                                    <div class="share-emoji">🤩</div>
+                                    <div>We're gonna be great friends!</div>
+                                {% elif score < 60 %}
+                                    <div class="share-emoji">🥰</div>
+                                    <div>We can be super close friends, even besties!</div>
+                                {% else %}
+                                    <div class="share-emoji">💫</div>
+                                    <div>Message me right now, OMG! I wanna be your best friend!</div>
+                                {% endif %}
+                            </div>
+                            <div class="share-footer">
+                                <div class="share-url">-Bhavya (Gaming Tech)</div>
+                            </div>
+                        </div>
+                        <div class="share-options">
+                            <button class="share-option" id="downloadImage">
+                                <i class="fas fa-download"></i>
+                                <span>Download Image</span>
+                            </button>
+                            <button class="share-option" id="copyLink">
+                                <i class="fas fa-link"></i>
+                                <span>Copy Link</span>
+                            </button>
+                            <div class="social-share-buttons">
+                                <button class="social-share twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </button>
+                                <button class="social-share facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </button>
+                                <button class="social-share instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </button>
+                                <button class="social-share whatsapp">
+                                    <i class="fab fa-whatsapp"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+                <script>
+                    // Modal functionality
+                    const modal = document.getElementById("shareModal");
+                    const shareBtn = document.getElementById("shareButton");
+                    const closeBtn = document.querySelector(".close-button");
+                    
+                    shareBtn.onclick = function() {
+                        modal.style.display = "flex";
+                    }
+                    
+                    closeBtn.onclick = function() {
+                        modal.style.display = "none";
+                    }
+                    
+                    window.onclick = function(event) {
+                        if (event.target === modal) {
+                            modal.style.display = "none";
+                        }
+                    }
+                    
+                    // Download functionality
+                    document.getElementById("downloadImage").addEventListener("click", function() {
+                        const shareCard = document.getElementById("shareCard");
+                        
+                        html2canvas(shareCard).then(canvas => {
+                            const link = document.createElement("a");
+                            link.download = "friendship-results.png";
+                            link.href = canvas.toDataURL("image/png");
+                            link.click();
+                        });
+                    });
+                    
+                    // Copy link functionality
+                    document.getElementById("copyLink").addEventListener("click", function() {
+                        const currentUrl = window.location.href;
+                        navigator.clipboard.writeText(currentUrl).then(() => {
+                            const button = this;
+                            const originalText = button.innerHTML;
+                            button.innerHTML = '<i class="fas fa-check"></i><span>Link Copied!</span>';
+                            setTimeout(() => {
+                                button.innerHTML = originalText;
+                            }, 2000);
+                        });
+                    });
+                    
+                    // Social share functionality
+                    const socialButtons = document.querySelectorAll(".social-share");
+                    socialButtons.forEach(button => {
+                        button.addEventListener("click", function() {
+                            const platform = this.classList[1];
+                            const text = "I scored {{ score }}/65 on the Friendship Quiz! Check out if we could be friends!";
+                            const url = encodeURIComponent(window.location.href);
+                            
+                            let shareUrl = "";
+                            switch(platform) {
+                                case "twitter":
+                                    shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${url}`;
+                                    break;
+                                case "facebook":
+                                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${url}`;
+                                    break;
+                                case "whatsapp":
+                                    shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(text + " " + window.location.href)}`;
+                                    break;
+                                case "instagram":
+                                    document.getElementById("downloadImage").click();
+                                    alert("Image downloaded! You can share it on Instagram manually.");
+                                    return;
+                            }
+                            
+                            window.open(shareUrl, "_blank", "width=600,height=400");
+                        });
+                    });
+                </script>
             </div>
         </main>
         
