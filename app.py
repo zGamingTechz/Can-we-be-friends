@@ -47,7 +47,7 @@ def home():
     user = User.query.filter_by(email=session['email']).first()
 
     if request.method == "POST":
-        answer = request.form['choice']
+        answer = request.form['answer']
 
         if answer.lower() == 'yes':
             answer_value = 1
