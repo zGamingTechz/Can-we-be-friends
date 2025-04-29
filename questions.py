@@ -37,6 +37,6 @@ questions = [
     
     {"qid": 27, "text": "Do you like me?", "points": 0},
     {"qid": 28, "text": "Would you like to hear me yapping about my life for an hour?", "points": 0},
-    {"qid": 28, "text": "Will you message me by yourself when I forget to?", "points": 0},
-    {"qid": 29, "text": "Do you understand that this is just a fun activity and doesn't impact our existing friendship?", "points": 0}
+    {"qid": 29, "text": "Will you message me by yourself when I forget to?", "points": 0},
+    {"qid": 30, "text": "Do you understand that this is just a fun activity and doesn't impact our existing friendship?", "points": 0}
 ]
