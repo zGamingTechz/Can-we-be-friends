@@ -61,7 +61,7 @@ def home():
         session['qid'] += 1
         if session['qid'] >= len(questions):
             session.pop('qid')
-            return redirect()
+            return redirect("/summary")
 
         return redirect("/home")
 
@@ -71,9 +71,8 @@ def home():
 @app.route("/summary")
 def summary():
     user = User.query.filter_by(email=session['email']).first()
-    score = user.score
 
-    return render_template("summary.html", score)
+    return render_template("summary.html", score=user.score)
 
 
 @app.route("/clear")
