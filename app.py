@@ -70,7 +70,10 @@ def home():
 
 @app.route("/summary")
 def summary():
-    return render_template("summary.html")
+    user = User.query.filter_by(email=session['email']).first()
+    score = user.score
+
+    return render_template("summary.html", score)
 
 
 @app.route("/clear")
