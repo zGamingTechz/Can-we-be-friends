@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import sqlite3 as sql
 from models import User, db
@@ -13,7 +13,7 @@ db.init_app(app)
 
 @app.route('/')
 def index():
-    return 'Hello world'
+    return render_template("login.html")
 
 
 if __name__ == '__main__':
