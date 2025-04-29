@@ -35,7 +35,7 @@ def login():
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect("/home")
+        return redirect(url_for("loading", source="login"))
 
     return render_template("login.html")
 
@@ -82,7 +82,7 @@ def loading():
     source = request.args.get("source")
 
     if source == "login":
-        messages = ["Setting up your experience...", "Creating your profile...", "Loading dashboard..."]
+        messages = ["Setting up your experience...", "Creating unique questions..."]
         duration = 6
         redirect_url = "/home"
     elif source == "home":
