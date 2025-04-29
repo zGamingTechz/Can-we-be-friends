@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Friendship Summary</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style_summary.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Friendship Results</h1>
+                <p class="hero-subtitle">Let's see how compatible we are!</p>
+                <div class="hero-circles">
+                    <div class="circle circle-1"></div>
+                    <div class="circle circle-2"></div>
+                    <div class="circle circle-3"></div>
+                </div>
+            </div>
+        </div>
+        
+        <main class="main-content">
+            <div class="result-container">
+                <div class="result-header">
+                    <i class="fas fa-heart-circle-check result-icon"></i>
+                    <h2>Your Friendship Score</h2>
+                    <p>Based on your answers to the questions</p>
+                </div>
+                
+                <div class="score-container">
+                    <div class="score-circle">
+                        <div class="score-number">{{ score }}</div>
+                        <div class="score-max">/65</div>
+                    </div>
+                </div>
+                
+                <div class="compatibility-container">
+                    <h3>Compatibility Level</h3>
+                    <div class="progress-bar-wrapper">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: {{ (score / 65) * 100 }}%;
+                            {% if score < 10 %}
+                                background: linear-gradient(to right, #cccccc, #aaaaaa);
+                            {% elif score < 20 %}
+                                background: linear-gradient(to right, #bbbbbb, #9988cc);
+                            {% elif score < 30 %}
+                                background: linear-gradient(to right, #9988cc, #8a65ff);
+                            {% elif score < 45 %}
+                                background: linear-gradient(to right, #8a65ff, #a363df);
+                            {% elif score < 50 %}
+                                background: linear-gradient(to right, #a363df, #c85db5);
+                            {% elif score < 55 %}
+                                background: linear-gradient(to right, #c85db5, #eb5992);
+                            {% elif score < 60 %}
+                                background: linear-gradient(to right, #eb5992, #ff4778);
+                            {% else %}
+                                background: linear-gradient(to right, #ff4778, #ff2d5f);
+                            {% endif %}"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="compatibility-result">
+                        {% if score < 10 %}
+                            <div class="result-emoji">😐</div>
+                            <div class="result-text">Meh, I don't know if we can be friends.</div>
+                        {% elif score < 20 %}
+                            <div class="result-emoji">🤔</div>
+                            <div class="result-text">Ehh, I don't know, maybe we can become friends.</div>
+                        {% elif score < 30 %}
+                            <div class="result-emoji">🙂</div>
+                            <div class="result-text">We have a chance of becoming friends!</div>
+                        {% elif score < 45 %}
+                            <div class="result-emoji">😊</div>
+                            <div class="result-text">Yeah, we can definitely be good friends!</div>
+                        {% elif score < 50 %}
+                            <div class="result-emoji">😄</div>
+                            <div class="result-text">We're gonna be close friends for sure!</div>
+                        {% elif score < 55 %}
+                            <div class="result-emoji">🤩</div>
+                            <div class="result-text">We're gonna be great friends!</div>
+                        {% elif score < 60 %}
+                            <div class="result-emoji">🥰</div>
+                            <div class="result-text">We can be super close friends, even besties!</div>
+                        {% else %}
+                            <div class="result-emoji">💫</div>
+                            <div class="result-text">Message me right now, OMG! I wanna be your best friend!</div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <a href="{{ url_for('social_links') }}" class="btn btn-connect">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Connect with Me</span>
+                    </a>
+                    <a href="{{ url_for('start_over') }}" class="btn btn-restart">
+                        <i class="fas fa-redo"></i>
+                        <span>Start Over</span>
+                    </a>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <div class="footer-bottom">
+                <p>&copy; 2025 Bhavya. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

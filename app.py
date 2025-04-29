@@ -51,6 +51,7 @@ def home():
 
         if answer.lower() == 'yes':
             answer_value = 1
+            user.score += questions[qid]["points"]
         elif answer.lower() == 'no':
             answer_value = 0
 
@@ -69,7 +70,7 @@ def home():
 
 @app.route("/summary")
 def summary():
-    pass
+    return render_template("summary.html")
 
 
 @app.route("/clear")
