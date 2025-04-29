@@ -11,10 +11,28 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
 db.init_app(app)
 
 
-@app.route('/')
-def index():
+@app.route('/', methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        username = request.form['username']
+        email = request.form['email']
+
+        new_user = User(
+            username=username,
+            email = email
+        )
+
+        db.session.add(new_user)
+        db.session.commit()
+
+        return redirect("/home")
+
     return render_template("login.html")
 
+
+@app.route('/home', methods=["GET", "POST"])
+def index():
+    return render_template("index.html")
 
 if __name__ == '__main__':
     app.run(debug=True)
