@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Loading...</title>
+  <style>
+    body {
+      margin: 0;
+      background: linear-gradient(135deg, #4e54c8, #8f94fb);
+      font-family: 'Segoe UI', sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      overflow: hidden;
+    }
+
+    .loader-box {
+      text-align: center;
+    }
+
+    .loader {
+      border: 8px solid rgba(255, 255, 255, 0.2);
+      border-top: 8px solid white;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .text {
+      font-size: 1.2rem;
+      animation: fade 0.5s ease-in-out;
+    }
+
+    @keyframes fade {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+  <div class="loader-box">
+    <div class="loader"></div>
+    <div class="text" id="loading-text">{{ messages[0] }}</div>
+  </div>
+
+  <script>
+    let msgList = {{ messages | tojson }};
+    let current = 0;
+    let textEl = document.getElementById("loading-text");
+
+    setInterval(() => {
+      current = (current + 1) % msgList.length;
+      textEl.textContent = msgList[current];
+    }, 3000);
+
+    setTimeout(() => {
+      window.location.href = "{{ redirect_url }}";
+    }, {{ duration * 1000 }});
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-responses = [
+text = [
     "Calculating bond...",
     "Calculating if I will give you the last slice of pizza.",
     "Finding matching interests",

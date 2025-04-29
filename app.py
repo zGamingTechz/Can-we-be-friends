@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import sqlite3 as sql
 from models import User, db
 from questions import questions
+from loading_text import text
+import random
 import keys
 
 app = Flask(__name__)
@@ -61,7 +63,7 @@ def home():
         session['qid'] += 1
         if session['qid'] >= len(questions):
             session.pop('qid')
-            return redirect("/summary")
+            return redirect("/loading", source="home")
 
         return redirect("/home")
 
@@ -73,6 +75,22 @@ def summary():
     user = User.query.filter_by(email=session['email']).first()
 
     return render_template("summary.html", score=user.score)
+
+
+@app.route("/loading")
+def loading():
+    source = request.args.get("source")
+
+    if source == "login":
+        messages = ["Setting up your experience...", "Creating your profile...", "Loading dashboard..."]
+        duration = 6
+        redirect_url = "/home"
+    elif source == "home":
+        messages = [random.choice(text) for i in range(3)]
+        duration = 12
+        redirect_url = "/summary"
+
+    return render_template("loading.html", messages=messages, duration=duration, redirect_url=redirect_url)
 
 
 @app.route("/clear")
