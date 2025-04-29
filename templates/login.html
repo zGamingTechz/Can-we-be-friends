@@ -13,7 +13,9 @@
         <div class="hero-section">
             <div class="hero-content">
                 <h1 class="hero-title">Can we become friends?</h1>
-                <p class="hero-subtitle">Let's find out</p>
+                <p class="hero-subtitle" style="color: {% if status == 'error' %}red{% else %}white{% endif %};">
+                    {{ message }}
+                </p>
                 <div class="hero-circles">
                     <div class="circle circle-1"></div>
                     <div class="circle circle-2"></div>

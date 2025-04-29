@@ -17,6 +17,10 @@ def login():
         username = request.form['username']
         email = request.form['email']
 
+        user = User.query.filter_by(email=email).first()
+        if user:
+            return render_template("login.html", message = "You already answered!", status = "error")
+
         new_user = User(
             username=username,
             email = email
@@ -27,7 +31,7 @@ def login():
 
         return redirect("/home")
 
-    return render_template("login.html")
+    return render_template("login.html", message = "Let's find out!", status = "success")
 
 
 @app.route('/home', methods=["GET", "POST"])
