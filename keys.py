@@ -1,1 +1,4 @@
 secret_key = "pizza"
+
+url = "https://kffqxfavjjwkbqcigvho.supabase.co"
+key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtmZnF4ZmF2amp3a2JxY2lndmhvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NTk0MDM3NywiZXhwIjoyMDYxNTE2Mzc3fQ.Ch1-19I42L2Lo00DplRNvtwIO9xqQnrpy-fboXVSAf0"

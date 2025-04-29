@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session
-from models import User, db
+from supabase import create_client, Client
 from questions import questions
 from loading_text import text
 import random
@@ -7,9 +7,11 @@ import keys
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = keys.secret_key
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///site.db"
 
-db.init_app(app)
+# Initialize Supabase
+supabase_url = keys.url
+supabase_key = keys.key
+supabase: Client = create_client(supabase_url, supabase_key)
 
 
 @app.route('/', methods=["GET", "POST"])
@@ -21,17 +23,20 @@ def login():
         # Store the email in session
         session['email'] = email
 
-        user = User.query.filter_by(email=email).first()
-        if user:
+        # Check if user exists
+        user_data = supabase.table('users').select('*').eq('email', email).execute()
+
+        if user_data.data:
             return redirect("/summary")
 
-        new_user = User(
-            username=username,
-            email = email
-        )
-
-        db.session.add(new_user)
-        db.session.commit()
+        # Create a new user
+        new_user = {
+            'username': username,
+            'email': email,
+            'score': 0,
+            'qid': []  # Initialize the empty array for responses
+        }
+        supabase.table('users').insert(new_user).execute()
 
         return redirect(url_for("loading", source="login"))
 
@@ -40,39 +45,56 @@ def login():
 
 @app.route('/home', methods=["GET", "POST"])
 def home():
-    if 'qid' not in session:
-        session['qid'] = 0
+    if 'qid_index' not in session:
+        session['qid_index'] = 0
 
-    qid = session['qid']
-    user = User.query.filter_by(email=session['email']).first()
+    qid_index = session['qid_index']
+    user_data = supabase.table('users').select('*').eq('email', session['email']).execute()
+
+    if user_data.data:
+        user = user_data.data[0]
 
     if request.method == "POST":
         answer = request.form['answer']
 
         if answer.lower() == 'yes':
             answer_value = 1
-            user.score += questions[qid]["points"]
+            user['score'] += questions[qid_index]["points"]
         elif answer.lower() == 'no':
             answer_value = 0
 
-        setattr(user, f'q{qid}', answer_value)
-        db.session.commit()
+        # Update the user's response in the qid array
+        qid_array = user['qid']
+        if len(qid_array) <= qid_index:
+            qid_array.append(answer_value)
+        else:
+            qid_array[qid_index] = answer_value
 
-        session['qid'] += 1
-        if session['qid'] >= len(questions):
-            session.pop('qid')
+        # Update the user record in Supabase
+        supabase.table('users').update({
+            'qid': qid_array,
+            'score': user['score']
+        }).eq('email', session['email']).execute()
+
+        session['qid_index'] += 1
+        if session['qid_index'] >= len(questions):
+            session.pop('qid_index')
             return redirect(url_for("loading", source="home"))
 
         return redirect("/home")
 
-    return render_template("home.html", question_text=questions[qid]["text"], qid = qid)
+    return render_template("home.html", question_text=questions[qid_index]["text"], qid=qid_index)
 
 
 @app.route("/summary")
 def summary():
-    user = User.query.filter_by(email=session['email']).first()
+    user_data = supabase.table('users').select('*').eq('email', session['email']).execute()
 
-    return render_template("summary.html", score=user.score)
+    if user_data.data:
+        user = user_data.data[0]
+        return render_template("summary.html", score=user['score'])
+
+    return redirect('/')
 
 
 @app.route("/loading")
@@ -94,7 +116,7 @@ def loading():
 @app.route("/clear")
 def clear_session():
     session.pop("email", None)
-    session.pop("qid", None)
+    session.pop("qid_index", None)
     return "Session cleared!"
 
 
